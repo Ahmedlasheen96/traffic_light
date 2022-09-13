@@ -1,0 +1,40 @@
+
+#include "Application/app.h"
+
+int main(void)
+{
+	DIO_Port_Direction(2,OUTPUT);
+	app_init();
+	while(1)
+	{
+		app_start();
+	}
+}
+ISR(EXT_INT_0)
+{
+
+	Disable_INT();
+	u8 red_reading,yellow_reading,green_reading;
+	DIO_Pin_Read(RED_CAR,&red_reading);
+	DIO_Pin_Read(YELLOW_CAR,&yellow_reading);
+	DIO_Pin_Read(GREEN_CAR,&green_reading);
+
+	if(red_reading)
+	{
+		G_To_Y();
+	}
+
+	else if(yellow_reading)
+	{
+		Y_To_G();
+	}
+
+	else if(green_reading)
+	{
+		R_To_Y();
+	}
+	Enable_INT0(RISING);
+
+
+}
+
